@@ -22,7 +22,8 @@ async function run() {
 
     const database = client.db("cleaningServices");
     const serviceCollection = database.collection("services");
-
+    const orderCollection = database.collection("orders");
+    
     //load all data
     app.get('/services', async(req,res)=>{
         const cursor = serviceCollection.find({});
@@ -36,6 +37,12 @@ async function run() {
       const singleService = await serviceCollection.findOne(query);
       res.json(singleService);
     })
+     //order or purchase insert
+     app.post("/orders", async (req, res) => {
+      const newOrder = req.body;
+      const result = await orderCollection.insertOne(newOrder);
+      res.send(result);
+    });
 
   } finally {
     // await client.close();
